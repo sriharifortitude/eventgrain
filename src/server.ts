@@ -1,3 +1,4 @@
+import './env.js';
 import { serve } from '@hono/node-server';
 
 import { buildApp } from './api/app.js';

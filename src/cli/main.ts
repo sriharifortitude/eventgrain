@@ -1,3 +1,4 @@
+import '../env.js';
 import { closeDb, db } from '../db/pool.js';
 import { dropExpiredPartitions, ensurePartitionsAhead, listPartitions } from '../db/partitions.js';
 import { createApiKey, createProject } from '../api/auth.js';

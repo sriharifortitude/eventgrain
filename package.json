@@ -8,9 +8,9 @@
     "node": ">=22"
   },
   "scripts": {
-    "dev": "tsx watch --env-file=.env src/server.ts",
-    "start": "node --env-file=.env dist/server.js",
-    "worker": "tsx --env-file=.env src/worker/main.ts",
+    "dev": "tsx watch src/server.ts",
+    "start": "node dist/server.js",
+    "worker": "tsx src/worker/main.ts",
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "lint": "eslint src tests",
@@ -18,8 +18,8 @@
     "test:integration": "vitest run --config vitest.integration.config.ts",
     "db:up": "docker compose up -d --wait",
     "db:down": "docker compose down -v",
-    "db:migrate": "tsx --env-file=.env src/db/migrate.ts",
-    "cli": "tsx --env-file=.env src/cli/main.ts"
+    "db:migrate": "tsx src/db/migrate.ts",
+    "cli": "tsx src/cli/main.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.7",
