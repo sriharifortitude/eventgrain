@@ -24,6 +24,8 @@ warehouse, and it is built so the numbers it produces can be explained.
   - `retention`: weekly cohorts by first occurrence of one event, returning
     on another, as a matrix.
   - `?format=csv` on any of them.
+- **Event names.** `GET /api/event-names` lists what the project has
+  recorded, for a UI to offer instead of a free-text field.
 - **Local time.** Every bucket and every cohort week is computed in the
   project's IANA zone. A Berlin Sunday in October is 25 hours long and
   the test suite says so.

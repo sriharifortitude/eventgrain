@@ -219,6 +219,16 @@ describe('retention', () => {
   });
 });
 
+describe('event names', () => {
+  it('lists names from rollups and from raw events not yet rolled up', async () => {
+    await recomputeDirtyDays();
+    await post('/api/events', { events: [ev('brand_new', 'z1', new Date(Date.now() - 3_600_000).toISOString())] });
+    const response = await app.request('/api/event-names', { headers: { authorization: `Bearer ${key}` } });
+    const { names } = (await response.json()) as { names: string[] };
+    expect(names).toEqual(['brand_new', 'cart', 'pageview', 'purchase', 'session', 'signup', 'view']);
+  });
+});
+
 describe('erasure and export', () => {
   it('streams raw events for one person as CSV, then erases them everywhere', async () => {
     const exportFor = async (): Promise<string> => (await app.request('/api/events/export?from=2025-10-25&to=2025-10-27&distinctId=p4', { headers: { authorization: `Bearer ${key}` } })).text();

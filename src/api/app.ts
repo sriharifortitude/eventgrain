@@ -36,6 +36,24 @@ export function buildApp(): Hono<Env> {
     return c.json(result, result.rejected.length > 0 ? 207 : 202);
   });
 
+  /**
+   * Event names seen for the project: everything with a rollup row plus
+   * anything raw in the last two days that the worker has not folded in
+   * yet. The union keeps this cheap on the raw table (index on project,
+   * name, time) while never omitting a name that was just introduced.
+   */
+  app.get('/api/event-names', async (c) => {
+    const { projectId } = c.get('principal');
+    const result = await db().query<{ name: string }>(
+      `select name from event_daily where project_id = $1
+       union
+       select distinct name from events where project_id = $1 and occurred_at >= now() - interval '2 days'
+       order by name`,
+      [projectId],
+    );
+    return c.json({ names: result.rows.map((r) => r.name) });
+  });
+
   app.post('/api/query', async (c) => {
     const parsed = querySchema.safeParse(await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ error: 'invalid', issues: issues(parsed.error) }, 400);
