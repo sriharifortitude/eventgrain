@@ -1,3 +1,4 @@
+import '../env.js';
 import { Queue, Worker } from 'bullmq';
 import { Redis } from 'ioredis';
 
