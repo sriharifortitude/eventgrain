@@ -1,0 +1,45 @@
+{
+  "name": "eventgrain",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Self-hosted product analytics: batched event ingest, month-partitioned Postgres storage, count/unique/funnel/retention queries bucketed in any time zone, scheduled rollups, per-person erasure, retention by partition drop, CSV export.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "tsx watch --env-file=.env src/server.ts",
+    "start": "node --env-file=.env dist/server.js",
+    "worker": "tsx --env-file=.env src/worker/main.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src tests",
+    "test": "vitest run --config vitest.unit.config.ts",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose down -v",
+    "db:migrate": "tsx --env-file=.env src/db/migrate.ts",
+    "cli": "tsx --env-file=.env src/cli/main.ts"
+  },
+  "dependencies": {
+    "@hono/node-server": "^1.13.7",
+    "bullmq": "^5.34.6",
+    "hono": "^4.6.14",
+    "ioredis": "^5.4.2",
+    "pg": "^8.13.1",
+    "pg-query-stream": "^4.17.0",
+    "temporal-polyfill": "^0.2.5",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/node": "^22.10.2",
+    "@types/pg": "^8.11.10",
+    "eslint": "^9.17.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1",
+    "vitest": "^2.1.8"
+  },
+  "license": "BUSL-1.1"
+}
