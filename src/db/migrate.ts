@@ -13,12 +13,30 @@ import { closeDb, db } from './pool.js';
  *
  * A migration that has been applied is never re-run; editing an applied
  * file is a mistake the checksum column will catch.
+ *
+ * Several processes may run this at once -- every API replica's init
+ * container, for instance. A session-level advisory lock serialises them:
+ * the first applies what is pending, the rest find nothing to do.
  */
+
+// Arbitrary but fixed: the lock namespace for "eventgrain migrations".
+const MIGRATION_LOCK = 7_281_923;
 
 const MIGRATIONS_DIR = path.resolve(process.cwd(), 'migrations');
 
 export async function migrate(): Promise<string[]> {
   const pool = db();
+  const lockHolder = await pool.connect();
+  try {
+    await lockHolder.query('select pg_advisory_lock($1)', [MIGRATION_LOCK]);
+    return await applyPending(pool);
+  } finally {
+    await lockHolder.query('select pg_advisory_unlock($1)', [MIGRATION_LOCK]).catch(() => undefined);
+    lockHolder.release();
+  }
+}
+
+async function applyPending(pool: ReturnType<typeof db>): Promise<string[]> {
   await pool.query(`
     create table if not exists schema_migrations (
       name text primary key,
