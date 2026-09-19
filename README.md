@@ -75,7 +75,7 @@ The CLI prints an API key once. Send it as `Authorization: Bearer eg_…`.
     npm run typecheck
     npm run lint
     npm test                           # range/DST arithmetic, SQL builders, CSV: 21 tests
-    npm run test:integration           # against Postgres: 13 tests with hand-computed expectations
+    npm run test:integration           # against Postgres: 14 tests with hand-computed expectations
 
 The integration fixture straddles the 26 October 2025 clock change in
 Berlin: repeated 02:00 bucket, a person whose 23:30Z event is Monday
