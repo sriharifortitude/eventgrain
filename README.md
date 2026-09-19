@@ -52,6 +52,14 @@ warehouse, and it is built so the numbers it produces can be explained.
     npm run dev                        # API on :4200
     npm run worker                     # rollups every minute; partitions and retention nightly
 
+Or as containers — one image, three roles:
+
+    docker build -t eventgrain .
+    docker run --rm -e DATABASE_URL=... eventgrain node dist/db/migrate.js
+    docker run --rm -e DATABASE_URL=... eventgrain node dist/cli/main.js project create "My product" --tz Europe/Berlin
+    docker run -d -p 4200:4200 -e DATABASE_URL=... eventgrain                          # api
+    docker run -d -e DATABASE_URL=... -e REDIS_URL=... eventgrain node dist/worker/main.js
+
 The CLI prints an API key once. Send it as `Authorization: Bearer eg_…`.
 
     curl -s localhost:4200/api/events -H "authorization: Bearer $KEY" \
