@@ -1,5 +1,7 @@
 # eventgrain
 
+[![CI](https://github.com/sriharifortitude/eventgrain/actions/workflows/ci.yml/badge.svg)](https://github.com/sriharifortitude/eventgrain/actions/workflows/ci.yml)
+
 Self-hosted product analytics for a team that wants its event data in its
 own Postgres, in its own time zone, with a delete button that actually
 deletes. Batched ingest, month-partitioned storage, four query types
