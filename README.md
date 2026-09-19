@@ -107,7 +107,10 @@ signup belongs to the week that is ending.
   database access. An HTTP surface for them would need its own
   authentication story.
 - **No rate limiting or request size limit** beyond the 1,000-event batch
-  cap. Both belong to the reverse proxy in front of this.
+  cap. Both belong to the reverse proxy in front of this:
+  [gatelimit](https://github.com/sriharifortitude/gatelimit) does the
+  former, and [grainops](https://github.com/sriharifortitude/grainops)
+  runs the two together.
 - **Funnel scale.** Each step is a correlated lookup per person on the
   `(project, person, name, time)` index. Fine for tens of thousands of
   entrants per query; past that, a single-pass window-function formulation
