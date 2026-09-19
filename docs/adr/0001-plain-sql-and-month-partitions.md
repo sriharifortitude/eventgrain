@@ -17,7 +17,9 @@ matters.
 
 - Migrations are `.sql` files applied in order by `src/db/migrate.ts`,
   which records each file's SHA-256 and refuses to run if an applied file
-  has been edited. Forty lines, no dependency.
+  has been edited. Fifty lines, no dependency. A session-level advisory
+  lock serialises concurrent runs, so every replica can run it as an init
+  container and exactly one applies what is pending.
 - Queries use `pg` directly with positional parameters. Row types are
   declared at the call site; there is no generated client.
 - `events` is `partition by range (occurred_at)` with one partition per
